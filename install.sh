@@ -18,6 +18,16 @@ if ! [ -f /etc/apt/sources.list.d/google-cloud-sdk.list ]; then
     sudo apt install google-cloud-sdk google-cloud-sdk-app-engine-python
 fi
 
+if ! dpkg -s libportaudio2 > /dev/null; then
+    echo 'Installing libportaudio2...'
+    sudo apt install libportaudio2
+fi
+
+if ! [ -f /usr/include/portaudio.h ]; then
+    echo 'Installing portaudio19-dev...'
+    sudo apt install portaudio19-dev
+fi
+
 if ! [ -d venv ]; then
     virtualenv -p python2.7 venv
 fi
@@ -27,6 +37,6 @@ source venv/bin/activate
 set -u
 
 pip install -q pip==10.0.1 wheel==0.31.1
-pip install -q google-cloud==0.33.1
+pip install -q -r requirements.txt
 
 echo 'Everything has probably been installed.'
