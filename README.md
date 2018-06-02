@@ -22,9 +22,28 @@ environment variable is set. For example:
 export GOOGLE_APPLICATION_CREDENTIALS="$HOME/whatever.json"
 ```
 
-Run `arecord -f S16 -r 16000 ~/test.wav` to record a voice sample to read.
-Run `./test.py` to get the speech from the test file.
+Run `./speech_to_text_client.py` To start the speech-to-text client recording
+audio. It uses a simple text protocol which accepts the following commands
+as lines of input, in a case-insensitive manner.
 
-`arecord` might not record anything. Mess around with `pavucontrol` and select
-different audio devices if that happens, because you're probably using the wrong
-one.
+| Command        | Description                                                |
+| -------------- | ---------------------------------------------------------- |
+| `record`       | Start recording audio.                                     |
+| `stop`         | Stop recording audio, and get the text from Google.        |
+
+The protocol will respond with the following lines.
+
+| Response       | Description                                                |
+| -------------- | ---------------------------------------------------------- |
+| `record start` | Signals when recording stops.                              |
+| `record stop`  | Signals when recording ends.                               |
+| `speech ...`   | Text data returned from Google.                            |
+
+The client will catch SIGINT and stop the client as soon as possible, in a safe
+manner. Debug information may be written to stderr. The client won't work at all
+on operating systems that aren't Unix-like.
+
+Nothing might be coming out from the voice samples when you try to record
+speech. If this happens, mess around with `pavucontrol` and select different
+audio devices while recording is live. You're probably using the wrong audio
+device.
