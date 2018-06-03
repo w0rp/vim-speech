@@ -19,6 +19,10 @@ storing in in a path like the following:
 ~/.vim/pack/git-plugins/start/vim-speech
 ```
 
+You will also need to install [ALE](https://github.com/w0rp/ale), as this plugin
+currently uses functions from ALE, purely so the plugin could be written more
+quickly. Follow the [instructions for installing ALE](https://github.com/w0rp/ale#installation).
+
 After the plugin has been installed, you'll need to install all of the
 requirements for your system and build the virtualenv that the project uses
 for the Python text to speech client. You will need...
