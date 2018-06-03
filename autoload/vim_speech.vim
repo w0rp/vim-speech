@@ -9,6 +9,12 @@ if !exists('s:buffer_to_write_to')
     let s:buffer_to_write_to = 0
 endif
 
+if !exists('g:vim_speech_info')
+    let g:vim_speech_info = {
+    \ 'recording': 0,
+    \}
+endif
+
 function! s:HandleExit(job_id, exit_code) abort
     " If the job is the current one, clear the ID so we start again.
     if a:job_id is s:job_id
@@ -98,6 +104,7 @@ function! vim_speech#StartRecording() abort
 
     if s:job_id > 0
         call ale#job#SendRaw(s:job_id, "record\n")
+        let g:vim_speech_info.recording = 1
     else
         throw 'Failed to start speech client!'
     endif
@@ -109,6 +116,16 @@ function! vim_speech#StopRecording() abort
     if s:job_id > 0
         call ale#job#SendRaw(s:job_id, "stop\n")
         let s:buffer_to_write_to = l:buffer
+        let g:vim_speech_info.recording = 0
+    endif
+endfunction
+
+" Toggle recording on and off, for easier keybinds.
+function! vim_speech#ToggleRecording() abort
+    if get(g:vim_speech_info, 'recording', 0)
+        call vim_speech#StopRecording()
+    else
+        call vim_speech#StartRecording()
     endif
 endfunction
 

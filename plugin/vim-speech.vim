@@ -11,9 +11,11 @@ let g:vim_speech_dir = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
 command! -bar SpeechRecord :call vim_speech#StartRecording()
 command! -bar SpeechStop :call vim_speech#StopRecording()
+command! -bar SpeechToggle :call vim_speech#ToggleRecording()
 command! -bar SpeechQuit :call vim_speech#Quit()
 
 " <Plug> mappings for commands
 nnoremap <silent> <Plug>(vim_speech_record) :SpeechRecord<Return>
 nnoremap <silent> <Plug>(vim_speech_stop) :SpeechStop<Return>
+nnoremap <silent> <Plug>(vim_speech_toggle) :SpeechToggle<Return>
 nnoremap <silent> <Plug>(vim_speech_quit) :SpeechQuit<Return>
