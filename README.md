@@ -1,18 +1,75 @@
 # vim-speech
 
 This project is an attempt at getting some basic speech to text processing
-working in Vim using Google's cloud services. This project is a proof of
-concept.
+working in Vim using Google's cloud services.
+
+**NOTE:** This project is a proof of concept.
+**NOTE:** To use this plugin, you will probably need to pay Google money, at
+least eventually.
 
 This project uses an MIT licence to allow you to basically do what you want.
 
 ## Installation
 
-Run `./install.sh` from the project directory to install everything from your
-Terminal.  This will only work on Debian on Ubuntu. For installation on other
-machines, read the script and try to figure it out.
+Add the directory for this git project to `runtimepath` for Vim somehow.
+You can load the plugin in Vim 8 easily with the built-in plugin mechanism by
+storing in in a path like the following:
 
-## Usage so far
+```
+~/.vim/pack/git-plugins/start/vim-speech
+```
+
+After the plugin has been installed, you'll need to install all of the
+requirements for your system and build the virtualenv that the project uses
+for the Python text to speech client. You will need...
+
+1. Python 2.7 with `virtualenv` installed.
+2. Google's `google-cloud-sdk` tools.
+3. `libportaudio2` and `portaudio19-dev` for audio recording.
+
+You can run the following to set up everything, including installing packages
+on Ubuntu:
+
+```
+cd ~/.vim/pack/git-plugins/start/vim-speech
+./install.sh
+```
+
+If you don't like running scripts from the Internet, _as you shouldn't_, go read
+`install.sh`, look at what it does, and figure it out.
+
+After the Python script has been set up, you will need to tell Vim and the
+script where your Google application credentials are by setting an environment
+variable. The easiest way to do this is to add a line to your `vimrc` file.
+
+```
+" This is how I specify the path to the JSON credentials file.
+let $GOOGLE_APPLICATION_CREDENTIALS = $HOME
+\   . '/content/application/speech-to-text-key.json'
+```
+
+You have to register a Google cloud service at https://cloud.google.com/ for any
+of this to work. You will be given such a JSON credentials file after you
+register a project with access to the "Cloud Speech API." See Google's
+speech-to-text demo site for more information:
+https://cloud.google.com/speech-to-text/
+
+## Usage
+
+Once you have figured out how to get everything installed, you can use the
+following commands in Vim for recording speech.
+
+| Command         | Description                                               |
+| --------------- | --------------------------------------------------------- |
+| `:SpeechRecord` | Start recording, and start the job if needed.             |
+| `:SpeechStop`   | Stop recording, and print the output to your buffer.      |
+| `:SpeechQuit`   | Stop the background job and free some memory.             |
+
+If you don't see any text being outputted into your buffer, you're probably just
+recording from the wrong device on your machine. Mess around in `pavucontrol` or
+whatever device selection application you have until it works.
+
+## Running the speech to text client outside of Vim
 
 Run the script from a terminal where your `GOOGLE_APPLICATION_CREDENTIALS`
 environment variable is set. For example:
@@ -22,9 +79,9 @@ environment variable is set. For example:
 export GOOGLE_APPLICATION_CREDENTIALS="$HOME/whatever.json"
 ```
 
-Run `./speech_to_text_client.py` To start the speech-to-text client recording
-audio. It uses a simple text protocol which accepts the following commands
-as lines of input, in a case-insensitive manner.
+Run `plugin/speech_to_text_client.py` To start the speech-to-text client
+recording audio. It uses a simple text protocol which accepts the following
+commands as lines of input, in a case-insensitive manner.
 
 | Command        | Description                                                |
 | -------------- | ---------------------------------------------------------- |

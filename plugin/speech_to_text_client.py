@@ -1,6 +1,7 @@
-#!venv/bin/python
+#!plugin/venv/bin/python
 from __future__ import absolute_import, print_function, unicode_literals
 
+import os
 import select
 import sys
 import wave
@@ -13,6 +14,14 @@ SAMPLE_RATE = 16000
 CHANNELS = 1
 CHUNK_SIZE = 1024
 AUDIO_FORMAT = pyaudio.paInt16
+
+
+def print_and_flush(*args, **kwargs):
+    """
+    print() doesn't flush, and we need to flush for the Vim plugin to work.
+    """
+    print(*args, **kwargs)
+    sys.stdout.flush()
 
 
 class RecordingClient(object):
@@ -118,6 +127,13 @@ def stdin_has_data():
 
 
 def main():
+    # Stop early if the environment variable isn't set.
+    if not os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'):
+        sys.exit(
+            'You must set GOOGLE_APPLICATION_CREDENTIALS'
+            ' to your JSON credentials filename.'
+        )
+
     client = RecordingClient()
     client.trap_sigint()
 
@@ -135,12 +151,12 @@ def main():
                     break
 
                 if message == 'record':
-                    print('record start')
+                    print_and_flush('record start')
                     client.start_recording()
                 elif message == 'stop':
-                    print('record end')
+                    print_and_flush('record end')
                     audio_content = client.stop_recording()
-                    print('speech', transcribe_file(audio_content))
+                    print_and_flush('speech', transcribe_file(audio_content))
                 elif message == 'quit':
                     break
 
@@ -148,7 +164,7 @@ def main():
 
     if client.signit_sent:
         # Print a line if we caught SIGINT, for the benefit of terminals.
-        print()
+        print_and_flush()
 
     client.cleanup()
 

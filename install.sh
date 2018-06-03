@@ -28,12 +28,12 @@ if ! [ -f /usr/include/portaudio.h ]; then
     sudo apt install portaudio19-dev
 fi
 
-if ! [ -d venv ]; then
-    virtualenv -p python2.7 venv
+if ! [ -d plugin/venv ]; then
+    virtualenv -p python2.7 plugin/venv
 fi
 
 set +u
-source venv/bin/activate
+source plugin/venv/bin/activate
 set -u
 
 pip install -q pip==10.0.1 wheel==0.31.1
