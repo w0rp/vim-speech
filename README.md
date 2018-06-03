@@ -4,6 +4,7 @@ This project is an attempt at getting some basic speech to text processing
 working in Vim using Google's cloud services.
 
 **NOTE:** This project is a proof of concept.
+
 **NOTE:** To use this plugin, you will probably need to pay Google money, at
 least eventually.
 
