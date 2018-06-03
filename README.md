@@ -9,6 +9,10 @@ least eventually.
 
 This project uses an MIT licence to allow you to basically do what you want.
 
+Click the image below to watch a video demonstration.
+
+[![vim-speech video demo](https://img.youtube.com/vi/UtInOI7LluA/0.jpg)](http://www.youtube.com/watch?v=UtInOI7LluA "vim-speech video demo")
+
 ## Installation
 
 Add the directory for this git project to `runtimepath` for Vim somehow.
