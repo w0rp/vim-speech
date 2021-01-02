@@ -92,6 +92,21 @@ class RecordingClient(object):
 
         return output_file.getvalue()
 
+def transcribe_file_with_deepspeech(content):
+    from deepspeech import Model
+    import numpy as np
+
+    if not content:
+        return ''
+
+    ds = Model(os.environ.get('DEEPSPEECH_MODEL'))
+    scorer = os.environ.get('DEEPSPEECH_SCORER')
+    if scorer:
+        ds.enableExternalScorer(scorer)
+    numpy_content = np.frombuffer(content, dtype=np.int16)
+    transcribe = ds.stt(numpy_content)
+    return transcribe
+
 
 def transcribe_file(content):
     from google.cloud import speech
@@ -127,11 +142,13 @@ def stdin_has_data():
 
 
 def main():
+
     # Stop early if the environment variable isn't set.
-    if not os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'):
+    if not os.environ.get('GOOGLE_APPLICATION_CREDENTIALS') and not os.environ.get('DEEPSPEECH_MODEL'):
         sys.exit(
             'You must set GOOGLE_APPLICATION_CREDENTIALS'
-            ' to your JSON credentials filename.'
+            'to your JSON credentials filename or DEEPSPEECH_MODEL'
+            'to trained deepspeech model.'
         )
 
     client = RecordingClient()
@@ -156,7 +173,7 @@ def main():
                 elif message == 'stop':
                     print_and_flush('record end')
                     audio_content = client.stop_recording()
-                    print_and_flush('speech', transcribe_file(audio_content))
+                    print_and_flush('speech',transcribe_file(audio_content) if os.environ.get('GOOGLE_APPLICATION_CREDENTIALS') else transcribe_file_with_deepspeech(audio_content))
                 elif message == 'quit':
                     break
 

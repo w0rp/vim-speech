@@ -63,6 +63,24 @@ register a project with access to the "Cloud Speech API." See Google's
 speech-to-text demo site for more information:
 https://cloud.google.com/speech-to-text/
 
+### Deepspeech support (experimental)
+vim-speech can utilize the Mozilla [deepspeech](https://github.com/mozilla/DeepSpeech)
+
+You need to install deepspeech:
+```
+pip install deepspeech
+```
+
+And then download/train deepspeech model (and optionally the language model scorer). Then
+let this plugin know about their location e.g.
+```
+export DEEPSPEECH_MODEL=<path to my deepspeech model e.g.deepspeech-0.9.3-models.pbmm>
+export DEEPSPEECH_SCORER=<path to my deepspeech scorer e.g. deepspeech-0.9.3-models.scorer>
+```
+
+It may be helpful to finetune the pre-trained model with your own voice samples.
+More info in [documentation](https://deepspeech.readthedocs.io/)
+
 ## Usage
 
 Once you have figured out how to get everything installed, you can use the
