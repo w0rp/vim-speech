@@ -80,8 +80,8 @@ function! s:StartJobIfNeeded(buffer) abort
         return
     endif
 
-    if empty($GOOGLE_APPLICATION_CREDENTIALS)
-        throw 'GOOGLE_APPLICATION_CREDENTIALS is not set'
+    if empty($GOOGLE_APPLICATION_CREDENTIALS) && empty($DEEPSPEECH_MODEL)
+        throw 'Neither GOOGLE_APPLICATION_CREDENTIALS nor DEEPSPEECH_MODEL is set'
     endif
 
     let l:command = ale#Escape(g:vim_speech_dir . '/venv/bin/python')
